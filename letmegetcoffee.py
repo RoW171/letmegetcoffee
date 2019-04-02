@@ -21,10 +21,36 @@ from time import sleep
 # 'from winsound import Beep' on line 43, since it is platform specific
 
 
-class lmgc:
-    """
+__doc__ = """
+This module provides functionality to catch errors and notify you if
+something goes wrong, so if you do something heavily time consuming,
+like training neural networks, searching primes, etc., you can walk
+away and still know if an error occurs.
 
-    """
+usage:
+    from letmegetcoffee import lmgc
+
+    # specify the type of exception you want to catch
+    lmgc.EXCEPTIONS = IndexError  # or any other error(s); defaults to (Exception,)
+
+    # specify the function to call after an exception
+    lmgc.ON_EXCEPTION = lmgc.on_exception_beep  # starts to beep on exception
+
+while 'lmgc.EXCEPTIONS' isn't really necessary to specify, 'lmgc.ON_EXCEPTION'
+is really important to specify after import because it will default to 'print'
+otherwise and just print out the exception-object.
+
+At the moment the module only supports beeping on errors, but others like
+email should come in the future.
+
+    @lmgc.catch
+    def someFunction(arg):
+        ...
+"""
+
+
+class lmgc:  # lowercase class, horrible I know, but it seems to fit here
+    __doc__ = __doc__
 
     EXCEPTIONS = (Exception,)
     ON_EXCEPTION = print
@@ -36,7 +62,7 @@ class lmgc:
         like this:
 
         @lmgc.catch
-        def randomFunction(arg):
+        def someFunction(arg):
             ...
 
         :param func: the function; gets handled by the decorator
@@ -53,6 +79,7 @@ class lmgc:
     def on_exception_beep(e):
         """
         beep when an error occurred, not to be called by the user, only set onto lmgc.ON_EXCEPTION
+        REMEBER to turn your volume up
         :param e: Exception(child) object; passed by lmgc.catch
         :return: None
         """
@@ -71,19 +98,13 @@ class lmgc:
                 sleep(0.5)
 
 
-lmgc.ON_EXCEPTION = lmgc.on_exception_beep
-
-
-@lmgc.catch
-def testing(number):
-    from random import randint
-    # number = 1000000
-    counter = int()
-    while True:
-        counter += 1
-        number / randint(0, number)
-    print(counter)
-
-
 if __name__ == '__main__':
-    testing(20)
+    # testing:
+    lmgc.ON_EXCEPTION = lmgc.on_exception_beep
+
+    @lmgc.catch
+    def testing(number):
+        from random import randint
+        while True: number / randint(0, number)
+
+    testing(number=30)
