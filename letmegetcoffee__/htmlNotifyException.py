@@ -13,56 +13,33 @@ __status__ = "In Development"
 __maintainer__ = "Robin Weiland"
 
 from http.server import SimpleHTTPRequestHandler
-from ssl import wrap_socket
 from socketserver import TCPServer
+from random import choice
 
 
 RESPONSE = """
 <html>
-    <head>
-        <title>Test</title>
-    </head>
-    <script type="text/javascript">
-        function notifyMe() {
-            if (!("Notification" in window)) {
-                alert("This browser does not support system notifications");
-                }
-            else if (Notification.permission === "granted") {
-                var notification = new Notification("Hi there!");
-                }
-            else if (Notification.permission !== 'denied') {
-                Notification.requestPermission(function (permission) {
-                    if (permission === "granted") {
-                        var notification = new Notification("Hi there!");
-                            }
-                        });
-                    }
-                }
-        function note(){
-            var notification = new Notification("this is a test");
-
-            }
-    </script>
+    <head> <title>LetMeGetCoffee</title></head>
     <body>
-        this is a new test
-        <script type="text/javascript">
-            notifyMe();
-            note();
-        </script>
-        <button type="button" onclick="var notification = new Notification("Hi there!")">Test Me!</button>
+    <blockquote style="width: 90%; color: {color}; background-color: lightyellow; border: 5px solid {color};
+    border-radius: 1em 1em 1em 1em; margin: 20px auto; padding: 2em; font-size: 2.5em; text-align: center;">
+    <p>{message}</p></blockquote>
     </body>
 </html>
 """
 
 
 class HTTPHandler(SimpleHTTPRequestHandler):
+    def log_message(self, format, *args): pass
+
     def do_GET(self):
-        print('-' * 10)
         self.send_response(200, 'OK')
         self.send_header('Content-type', 'text/html')
         self.end_headers()
 
-        message = RESPONSE
+        message = RESPONSE.format(color=choice(['red', 'green']),
+                                  message=choice(['Everything seems fine',
+                                                  'DivisionByZeroError at line 1 in file \'test.py\'']))
 
         self.wfile.write(bytes(message, 'utf-8'))
         return
@@ -73,7 +50,6 @@ class HTMLNotifyException(BaseException): pass
 
 def serve(address=''):
     server = TCPServer((address, 12345), HTTPHandler)
-    # server.socket = wrap_socket(server.socket)
     server.serve_forever()
 
 
