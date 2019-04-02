@@ -98,13 +98,4 @@ class lmgc:  # lowercase class, horrible I know, but it seems to fit here
                 sleep(0.5)
 
 
-if __name__ == '__main__':
-    # testing:
-    lmgc.ON_EXCEPTION = lmgc.on_exception_beep
-
-    @lmgc.catch
-    def testing(number):
-        from random import randint
-        while True: number / randint(0, number)
-
-    testing(number=30)
+if __name__ == '__main__': pass
