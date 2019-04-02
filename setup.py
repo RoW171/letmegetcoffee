@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 setuptools.setup(
     name='letmegetcoffee',
     version='0.1.0',
-    packages=setuptools.find_packages,
+    packages=setuptools.find_packages(),
     url='https://github.com/RoW171/letmegetcoffee',
     license='MIT',
     author="Robin 'r0w' Weiland",
