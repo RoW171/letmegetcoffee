@@ -4,7 +4,6 @@ __version__ = "0.0.1"
 
 from random import randint
 from letmegetcoffee import lmgc
-
 lmgc.ON_EXCEPTION = lmgc.on_exception_beep
 
 
