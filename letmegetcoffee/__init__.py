@@ -12,6 +12,8 @@ __license__ = "MIT"
 __status__ = "In Development"
 __maintainer__ = "Robin Weiland"
 
+__all__ = ['lmgc']
+
 # imports:
 from warnings import warn
 from platform import system
